@@ -2,13 +2,24 @@ import {Layout, makeScene2D, Rect, Latex, Shape} from '@motion-canvas/2d';
 import {all, createRef, Reference, sequence, ThreadGenerator, useRandom} from '@motion-canvas/core';
 
 
-function* setColors(rectangles: Array<Reference<Shape>>, j: number, i: number, lesser: boolean, duration: number): ThreadGenerator {
+function* setColors(rectangles: Array<Reference<Shape>>, prev: Array<number>, j: number, i: number, lesser: boolean, duration: number): ThreadGenerator {
+    let x: number;
+    let prev_seq: Array<number> = [j];
+    while ((x = prev[prev_seq[prev_seq.length-1]]) >= 0) {
+        prev_seq.push(x);
+    }
     yield* all(
         ...rectangles.map((ref, idx) => {
             if (idx == i) {
                 return ref().fill('yellow', duration)
             } else if (idx == j) {
-                return ref().fill(lesser ? 'green' : 'red', duration)
+                if (lesser) {
+                    return ref().fill('green', duration)
+                } else {
+                    return ref().fill('red', duration)
+                }
+            } else if (lesser && prev_seq.includes(idx)) {
+                return ref().fill('cyan', duration)
             } else {
                 return ref().fill('white', duration)
             }
@@ -25,6 +36,7 @@ export default makeScene2D(function* (view) {
     const values = Array.from({length: n}, () => random.nextFloat());
     const dp = Array.from({length: n}, () => createRef<Latex>());
     const dp_values = Array.from({length: n}, () => 1);
+    const prev = Array.from({length: n}, () => -1);
 
     const bars_layout = createRef<Layout>();
     view.add(<Layout layout ref={bars_layout} gap={20} width={1400} height={800} alignItems={'end'}>
@@ -50,17 +62,18 @@ export default makeScene2D(function* (view) {
     );
 
     let speedSlow = 0.5;
-    let speedFast = 0.07;
+    let speedFast = 0.1;
 
     for (let i = 1; i < n; i++) {
         let speed = i < 7 ? speedSlow : speedFast;
 
         for (let j = 0; j < i; j++) {
             const lesser: boolean = values[j] < values[i];
-            yield* setColors(rectangles, j, i, lesser, speed);
+            yield* setColors(rectangles, prev, j, i, lesser, speed);
 
             if (lesser && dp_values[j] + 1 > dp_values[i]) {
                 dp_values[i] = dp_values[j] + 1;
+                prev[i] = j;
                 yield* dp[i]().tex(`${dp_values[i]}`, speed);
             }
         }
