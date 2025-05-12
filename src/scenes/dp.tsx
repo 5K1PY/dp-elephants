@@ -1,10 +1,8 @@
 import {Layout, makeScene2D, Rect, Line, Latex, Circle} from '@motion-canvas/2d';
-import {all, createRef, Reference, delay, sequence, useRandom, waitFor} from '@motion-canvas/core';
+import {all, createRef, Reference, delay, sequence, waitFor} from '@motion-canvas/core';
 import {range, N, getLayout, PRICES, TYPES, COLORS} from '../elephants';
 
 export default makeScene2D(function* (view) {
-    let random = useRandom();
-
     const elephants = Array.from({length: N}, () => createRef<Circle>());
     const arrows = Array.from({length: N}, () => createRef<Line>());
     const price_tags = Array.from({length: N}, () => createRef<Latex>());
