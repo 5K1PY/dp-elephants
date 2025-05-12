@@ -1,5 +1,5 @@
 import {Layout, makeScene2D, Rect, Line, Latex, Circle} from '@motion-canvas/2d';
-import {all, createRef, Reference, delay, sequence, useRandom} from '@motion-canvas/core';
+import {all, createRef, Reference, delay, sequence, useRandom, waitFor} from '@motion-canvas/core';
 import {range, N, getLayout, PRICES, TYPES, COLORS} from '../elephants';
 
 export default makeScene2D(function* (view) {
@@ -96,9 +96,29 @@ export default makeScene2D(function* (view) {
                     delay(0.3, use_offer().opacity(0, 1)),
                 );
             }
-
         }
-
-        if (t == N) break;
     }
+
+    yield* waitFor(5.0);
+
+    const change = Array.from({length: N}, () => createRef<Circle>());
+    view.add(
+        <>
+            {...range(N).map(t =>
+                <Circle ref={change[t]} fill={'red'} size={20} opacity={0}/>
+            )}
+        </>
+    );
+    for (let t=0; t<N; t++) {
+        for (let i=0; i<=COLORS.length; i++) {
+            if (dp[t][i] != dp[t+1][i]) {
+                yield* change[t]().absolutePosition(
+                    dp_latex[t][i]().absolutePosition().add(dp_latex[t+1][i]().absolutePosition()).div(2)
+                ).opacity(0).opacity(1, 1.0);
+            }
+        }
+    }
+    yield* all(
+        ...range(N).map(t => change[t]().opacity(0, 1.0))
+    );
 });

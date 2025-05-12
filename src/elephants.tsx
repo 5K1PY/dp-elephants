@@ -27,7 +27,7 @@ export function getLayout(layout: Reference<Layout>, elephants: Reference<Shape>
     return <Layout layout ref={layout} gap={20} width={500} height={800} alignItems={'center'} direction={'column'}>
         {range(N).map(i =>
             <Layout layout ref={per_offer_layouts[i]} gap={100} width={500} height={200} alignItems={'center'} direction={'row'}>
-            <Circle ref={elephants[i]} height={100} width={100} fill={TYPES_COLORS[i]}></Circle>
+            <Circle ref={elephants[i]} height={100} width={150} fill={TYPES_COLORS[i]}></Circle>
             {getArrow(arrows[i], "white", PRICES[i])}
             <Layout layout width={100} height={100} alignItems={'center'} justifyContent={'center'}>
                 <Latex ref={price_tags[i]} tex={Math.abs(PRICES[i]).toString()} fill={'white'} scale={2}/>
