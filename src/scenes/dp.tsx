@@ -103,20 +103,25 @@ export default makeScene2D(function* (view) {
     view.add(
         <>
             {...range(N).map(t =>
-                <Circle ref={change[t]} fill={'red'} size={20} opacity={0}/>
+                <Rect ref={change[t]} fill={'red'} height={10} radius={10} width={100} opacity={0}/>
             )}
         </>
     );
+
+    let changes = [];
     for (let t=0; t<N; t++) {
         for (let i=0; i<=COLORS.length; i++) {
             if (dp[t][i] != dp[t+1][i]) {
-                yield* change[t]().absolutePosition(
+                changes.push(change[t]().absolutePosition(
                     dp_latex[t][i]().absolutePosition().add(dp_latex[t+1][i]().absolutePosition()).div(2)
-                ).opacity(0).opacity(1, 1.0);
+                ).opacity(0).opacity(1, 1.0));
             }
         }
     }
+    yield* sequence(0.4, ...changes);
+
     yield* all(
         ...range(N).map(t => change[t]().opacity(0, 1.0))
     );
+    yield* waitFor(0.5);
 });
