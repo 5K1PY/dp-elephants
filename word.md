@@ -38,7 +38,7 @@ matter while only the very recent things do.
 ## LIS
 
 Next, let's crank up the difficulty a bit and find the longest increasing
-subsequence. Given a sequence of numbers, we want to choose
+subsequence. That is, given a sequence of numbers $a_i$, we want to choose
 some numbers, so the new sequence is increasing and as long as possible.
 
 Imagine we have already some subsequence and we want to add an element to the end
@@ -47,12 +47,9 @@ As I have said, the entire history (in this case the entire subsequence)
 doesn't matter, while only the most recent part (the last element) does.
 
 So let's use dynamic programming — let's denote $\ell_i$ as the length of the longest
-increasing subsequence ending with element $i$. All of the $\ell_i$ are
-at least one, because sequence of one element is always increasing.
-
-Imagine we want to calculate $\ell_j$ and we have the values for all previous indexes.
-We can take some subsequence that ends before $j$ with smaller element than the one at $j$
-and add our element to it.
+increasing subsequence ending with element $i$. Imagine we want to calculate $\ell_j$
+and we already have the values for all previous indexes. We can take some longest subsequence
+that ends before $j$ with smaller element than the one at $j$ and add our element to it.
 
 Now we can calculate all $\ell_i$ values and find the biggest one,
 which gives us an $\O(n^2)$ algorithm. If we would want to find the subsequence itself
