@@ -6,5 +6,10 @@ import lis from './scenes/lis?scene';
 import dp from './scenes/dp?scene';
 
 export default makeProject({
-  scenes: [statement, dp_heading, lis, dp],
+  scenes: [
+    statement,
+    dp_heading,
+    lis,
+    dp
+  ],
 });
