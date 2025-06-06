@@ -153,7 +153,7 @@ export default makeScene2D(function* (view) {
 
     let i = dp_values.indexOf(Math.max(...dp_values));
     while (i != -1) {
-        yield* rectangles[i]().fill('cyan', 0.5);
+        yield* rectangles[i]().fill('green', 0.5);
         i = prev[i];
     }
     yield* waitFor(1.0);
