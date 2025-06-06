@@ -5,7 +5,6 @@ $\gdef\O{\mathcal O}$
 TODO Prerequisites:
 - Complexity
 - Basic algorithms
-- Recursion
 
 ## The problem
 
@@ -60,4 +59,43 @@ Some of you would surely note that a faster algorithm exists, but that is a stor
 another time.
 
 ## Elephants
+
+So, armed with the knowledge of dynamic programming, let's return to our original problem.
+You can pause the video to figure it our yourself, however it is rather hard.
+
+Like I said, entire history does not matter. (In this case) So what are the things that matter here?
+1. What day are we in.
+2. What kind of elephant (if any) we currently have.
+3. And how much money we made or lost.
+
+Let us organize the values in the table. Rows will denote what day is it and columns which elephant we have. Each cell will store, the maximum value of money we can make.
+
+Before the beginning of the first day, we have no elephants and we have made no money.
+We cannot have a blue or a green before the first day, so we will just write $-\infinity$
+to denote that this is impossible.
+
+Now let's calculate the following row. In the first day, we can buy an elephant
+for 6 coins. We can always do nothing, and if want to end up with no elephant
+that's our only option. If we want to end up with blue elephant, we can either have
+elephant in the previous day or have no elephant or pay for a new one. The option where
+we make more money is the maximum one. For selling this is similar, but we gain coins
+and end up with no elephant.
+
+...
+
+We can read how much money we can make in the last row, if we have no elephant.
+(It is always better to not buy the elephant in the first place.) If we would want
+to know, when to buy and when to sell, we could use the same approach in the Longest increasing subsequence, by remembering which of the preceding two values was the maximum
+and then walk backwards.
+
+So what is our time complexity? As there can be as many kinds of elephants as there are days,
+our time complexity is $\O(n^2)$ where $n$ is the number of days.
+
+But this can be improved. Can you spot the key observation here?
+
+...
+
+The rows are really similar here. In fact only one number can change. When we can buy an elephant, it's the state with new elephant. If we are selling, it's the state without an elephant. So instead of constructing the new row number by number, we can only change one value. Therefore we do only one change per day, which yields $\O(n)$ algorithm.
+
+## Other problem
 
