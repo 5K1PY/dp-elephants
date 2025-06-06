@@ -157,4 +157,12 @@ export default makeScene2D(function* (view) {
         i = prev[i];
     }
     yield* waitFor(1.0);
+
+    yield* all(
+        li().opacity(0, 1.0),
+        ai().opacity(0, 1.0),
+        ...rectangles.map((ref, _) => ref().opacity(0, 1.0)),
+        ...dp.map((ref, _) => ref().opacity(0, 1.0)),
+    );
+    yield* waitFor(3.0);
 });

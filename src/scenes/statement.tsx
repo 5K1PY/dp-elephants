@@ -1,5 +1,5 @@
 import {Layout, makeScene2D, Line, Latex, Circle} from '@motion-canvas/2d';
-import {all, createRef, sequence} from '@motion-canvas/core';
+import {all, createRef, sequence, waitFor} from '@motion-canvas/core';
 import {range, N, getLayout} from '../elephants';
 
 export default makeScene2D(function* (view) {
@@ -16,6 +16,15 @@ export default makeScene2D(function* (view) {
             elephants[i]().opacity(0).opacity(1, duration),
             arrows[i]().opacity(0).opacity(1, duration),
             price_tags[i]().opacity(0).opacity(1, duration)
+        )),
+    );
+    yield* waitFor(2.0);
+    yield* sequence(
+        duration/3,
+        ...range(N).map(i => all(
+            elephants[i]().opacity(1).opacity(0, duration),
+            arrows[i]().opacity(1).opacity(0, duration),
+            price_tags[i]().opacity(1).opacity(0, duration)
         )),
     );
 });
